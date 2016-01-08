@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="gwt:property" content="locale=<%= I18n.locale.to_s.gsub(/-/, '_') -%>">
+<meta http-equiv="X-UA-Compatible" content="IE=9">
+<link rel="shortcut icon" type="image/x-icon" href="<%= image_path('favicon.ico') -%>"/>
+<%
+if @page_title
+title="SonarQube - #{h(@page_title)}"
+elsif @project
+title="SonarQube - #{h(@project.name)}"
+elsif @resource
+title="#{h(@resource.long_name)}"
+else
+title='SonarQube'
+end
+%>
+<title><%= title -%></title>
+<% if ENV['RAILS_ENV'] == 'production'
+%>
+<%= stylesheet_link_tag 'sonar', :media => 'all' -%>
+<%= yield :style -%>
+<%= javascript_include_tag 'sonar' -%>
+<% else %>
+<%= stylesheet_link_tag 'yui-reset-font', :media => 'all' %>
+<%= stylesheet_link_tag 'jquery-ui', :media => 'all' %>
+<%= stylesheet_link_tag 'select2', :media => 'all' %>
+<%= stylesheet_link_tag 'select2-sonar', :media => 'all' %>
+<%= stylesheet_link_tag 'layout', :media => 'all' %>
+<%= stylesheet_link_tag 'style', :media => 'all' %>
+<%= stylesheet_link_tag 'icons', :media => 'all' %>
+<%= stylesheet_link_tag 'ui', :media => 'all' %>
+<%= stylesheet_link_tag 'sonar-colorizer', :media => 'all' %>
+<%= stylesheet_link_tag 'dashboard', :media => 'all' %>
+<%= stylesheet_link_tag 'select-list', :media => 'all' %>
+<%= stylesheet_link_tag 'navigator', :media => 'all' %>
+<%= yield :style -%>
+<%= javascript_include_tag 'third-party/prototype' %>
+<%= javascript_include_tag 'third-party/scriptaculous' %>
+<%= javascript_include_tag 'third-party/tablekit' %>
+<%= javascript_include_tag 'third-party/jquery.min' %>
+<%= javascript_include_tag 'third-party/jquery-ui.min' %>
+<%= javascript_include_tag 'third-party/jquery-ui.tabs' %>
+<%= javascript_include_tag 'third-party/d3.v3.min' %>
+<%= javascript_include_tag 'third-party/underscore-min' %>
+<%= javascript_include_tag 'third-party/backbone-min' %>
+<%= javascript_include_tag 'third-party/backbone.marionette.min' %>
+<%= javascript_include_tag 'third-party/handlebars' %>
+<%= javascript_include_tag 'third-party/jquery.ba-throttle-debounce.min.js' %>
+<%= javascript_include_tag 'third-party/select2.min' %>
+<%= javascript_include_tag 'widgets/widget' %>
+<%= javascript_include_tag 'widgets/bubble-chart' %>
+<%= javascript_include_tag 'widgets/timeline' %>
+<%= javascript_include_tag 'widgets/stack-area' %>
+<%= javascript_include_tag 'widgets/pie-chart' %>
+<%= javascript_include_tag 'widgets/histogram' %>
+<%= javascript_include_tag 'select-list' %>
+<%= javascript_include_tag 'top-search' %>
+<%= javascript_include_tag 'sortable' %>
+<%= javascript_include_tag 'navigator/handlebars-extensions' %>
+<%= javascript_include_tag 'navigator/filters/base-filters' %>
+<%= javascript_include_tag 'navigator/filters/select-filters' %>
+<%= javascript_include_tag 'navigator/filters/ajax-select-filters' %>
+<%= javascript_include_tag 'navigator/filters/range-filters' %>
+<%= javascript_include_tag 'navigator/filters/checkbox-filters' %>
+<%= javascript_include_tag 'navigator/filters/string-filters' %>
+<%= javascript_include_tag 'navigator/filters/metric-filters' %>
+<%= javascript_include_tag 'navigator/filters/favorite-filters' %>
+<%= javascript_include_tag 'navigator/filters/more-criteria-filters' %>
+<%= javascript_include_tag 'navigator/filters/context-filters' %>
+<%= javascript_include_tag 'navigator/issues' %>
+<%= javascript_include_tag 'navigator/issues-app' %>
+<%= javascript_include_tag 'navigator/issues-app-old' %>
+<%= javascript_include_tag 'navigator/measures-app' %>
+<%= javascript_include_tag 'application' %>
+<%= javascript_include_tag 'dashboard' %>
+<%= javascript_include_tag 'duplication' %>
+<%= javascript_include_tag 'resource' %>
+<%= javascript_include_tag 'issue' %>
+<%= javascript_include_tag 'recent-history' %>
+<% end %>
+<script>var baseUrl = '<%= ApplicationController.root_context -%>';
+var $j = jQuery.noConflict();
+$j(document).ready(function () {$j('.open-modal').modal()});
+</script>
+<%= yield :script -%>
+</head>
+<body>

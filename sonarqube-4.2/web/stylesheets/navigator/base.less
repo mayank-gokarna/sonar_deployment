@@ -1,0 +1,426 @@
+@import "../variables";
+@import "../mixins";
+
+@import "config";
+
+
+.navigator { }
+
+
+.navigator-element() {
+  position: fixed;
+  z-index: 2;
+  .box-sizing(border-box);
+}
+
+.navigator-header {
+  .navigator-element;
+  top: @navigatorTopOffset;
+  left: 0;
+  .size(100%, @navigatorHeaderHeight);
+}
+
+.navigator-filters {
+  .navigator-element;
+  top: @navigatorTopOffset + @navigatorHeaderHeight;
+  left: 0;
+  .size(100%, @navigatorFiltersHeight);
+}
+
+.navigator-results {
+  .navigator-element;
+  .box-sizing(content-box);
+  top: @navigatorTopOffset + @navigatorHeaderHeight + @navigatorFiltersHeight + @navigatorStatusHeight;
+  bottom: 0;
+  left: 0;
+  width: @navigatorResultsWidth - 1px;
+}
+
+.navigator-details {
+  .navigator-element;
+  top: @navigatorTopOffset + @navigatorHeaderHeight + @navigatorFiltersHeight;
+  bottom: @navigatorBottomOffset;
+  left: @navigatorResultsWidth;
+  right: 0;
+}
+
+.navigator-actions {
+  .navigator-element;
+  top: @navigatorTopOffset + @navigatorHeaderHeight + @navigatorFiltersHeight;
+  left: 0;
+  .size(@navigatorResultsWidth, @navigatorStatusHeight);
+}
+
+.navigator-notes {
+  .navigator-element;
+  top: @navigatorTopOffset + @navigatorHeaderHeight + @navigatorFiltersHeight;
+  left: 0;
+  .size(100%, @navigatorNotesHeight);
+  display: none;
+}
+
+
+.navigator-simple {
+  .navigator-filters {
+    top: @navigatorTopOffset;
+  }
+
+  .navigator-results {
+    top: @navigatorTopOffset + @navigatorFiltersHeight;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+}
+
+
+.navigator-with-notes {
+
+  .navigator-actions,
+  .navigator-details {
+    top: @navigatorTopOffset + @navigatorHeaderHeight + @navigatorFiltersHeight + @navigatorNotesHeight;
+  }
+
+  .navigator-results {
+    top: @navigatorTopOffset + @navigatorHeaderHeight + @navigatorFiltersHeight + @navigatorNotesHeight + @navigatorStatusHeight;
+  }
+
+  .navigator-notes {
+    display: block;
+  }
+
+  .navigator-details .source_title {
+    top: @navigatorTopOffset + @navigatorHeaderHeight + @navigatorFiltersHeight + @navigatorNotesHeight;
+  }
+
+  .navigator-fetching.navigator-results-list:before {
+    top: @navigatorTopOffset + @navigatorHeaderHeight + @navigatorFiltersHeight + @navigatorStatusHeight + @navigatorNotesHeight;
+  }
+
+}
+
+
+.navigator-fetching {
+  &:before {
+    content: " ";
+    position: absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+    background: #fff url(../images/loading.gif) no-repeat 4px 4px;
+  }
+
+  &#tab-issue-rule {
+    position: relative;
+
+    &:before {
+      z-index: 3;
+      background-color: #EFEFEF;
+    }
+  }
+
+  &.code-issue-actions {
+    position: relative;
+
+    &:before {
+      z-index: 3;
+      background-color: #E4ECF3;
+    }
+  }
+}
+
+
+
+// Header
+.navigator-header {
+  padding: 0 @navigatorPadding;
+  border-bottom: 1px solid @navigatorBorderColor;
+  background-color: @navigatorBarBackground;
+  font-size: 0;
+}
+
+.navigator-header-favorite {
+  padding-left: 46px;
+}
+
+.navigator-header-title {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 20px;
+  line-height: @navigatorHeaderHeight;
+}
+
+.navigator-header-description {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 16px;
+  font-size: @smallFontSize;
+  font-style: italic;
+}
+
+.navigator-header-actions {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 16px;
+
+  & > button {
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+    padding: 2px 8px;
+    font-size: @smallFontSize;
+    font-weight: normal;
+    cursor: pointer;
+
+    &:hover, &:focus {
+      z-index: 3;
+    }
+  }
+
+  & > button + button {
+    margin-left: -1px;
+  }
+}
+
+
+
+// Notes
+.navigator-notes {
+  padding: 0 @navigatorPadding;
+  border-bottom: 1px solid @navigatorBorderColor;
+  background-color: @navigatorBarBackground;
+
+  color: #777;
+  font-size: @smallFontSize;
+  line-height: @navigatorNotesHeight;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+
+// Results
+.navigator-results {
+  border-right: 1px solid @navigatorBorderLightColor;
+  background-color: @white;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.navigator-results-list {
+
+  & > li {
+    padding: @navigatorPadding / 2 0;
+    cursor: pointer;
+    .trans;
+
+    &:first-child {
+      border-top: 1px solid transparent;
+
+      &.active {
+        border-top-color: #4B9FD5;
+      }
+    }
+
+    &:last-child {
+      border-bottom: 1px solid transparent;
+
+      &.active {
+        border-bottom-color: #4B9FD5;
+      }
+    }
+
+    .line {
+      padding: @navigatorPadding / 2 @navigatorPadding;
+      line-height: 1.2;
+    }
+
+    .line-small {
+      font-size: 11px;
+      line-height: 14px;
+    }
+
+    .line-right {
+      float: right;
+    }
+
+    .line-nowrap {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &:hover {
+      background-color: @navigatorBarBackground;
+    }
+
+    &.active {
+      background-color: #CAE3F2;
+      border-color: #4B9FD5;
+    }
+  }
+
+  & > li + li {
+    border-top: 1px solid @navigatorBorderLightColor;
+  }
+
+  & > li.active + li {
+    border-top-color: #4B9FD5;
+  }
+
+  &.navigator-fetching {
+
+    & > li .line-nowrap {
+      text-overflow: clip; /* thanks to FF */
+    }
+
+    &:before {
+      position: fixed;
+      z-index: 3;
+      top: @navigatorTopOffset + @navigatorHeaderHeight + @navigatorFiltersHeight + @navigatorStatusHeight;
+      bottom: 0;
+      left: 0;
+      width: @navigatorResultsWidth - 1px;
+    }
+  }
+}
+
+.navigator-results-no-issues {
+  padding-top: 20%;
+  color: #999;
+  text-align: center;
+}
+
+
+
+// Details
+.navigator-details {
+  padding: 62px 0 @navigatorPadding @navigatorPadding;
+  background-color: @white;
+  overflow: auto;
+
+  &.loading {
+    background: @white url("../images/loading.gif") no-repeat 4px 2px;
+  }
+
+  .code-issue-name {
+    border-bottom: none;
+  }
+
+  .code-issue-actions {
+    background-color: #E4ECF3;
+  }
+
+  .source_title {
+    position: fixed;
+    z-index: 3;
+    top: @navigatorTopOffset + @navigatorHeaderHeight + @navigatorFiltersHeight;
+    left: @navigatorResultsWidth;
+    right: 0;
+    padding: @navigatorPadding;
+    border-bottom: 1px solid @navigatorBorderLightColor;
+    background-color: #fff;
+  }
+
+  .source {
+    padding-right: 10px;
+
+    & > table {
+      border: 1px solid #DDD;
+    }
+  }
+
+  .scm .author {
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+
+
+// Status
+.navigator-actions {
+  padding: 0 @navigatorPadding 0 0;
+
+  border-right: 1px solid @navigatorBorderLightColor;
+  border-bottom: 1px solid @navigatorBorderLightColor;
+  background-color: @navigatorBarBackground;
+  font-size: @smallFontSize;
+
+  strong { font-weight: bold; }
+}
+
+.navigator-actions-order {
+  float: left;
+  padding: 0 @navigatorPadding;
+  line-height: @navigatorStatusHeight;
+  cursor: pointer;
+  .trans;
+
+  &:hover {
+    background-color: @navigatorBarBackground;
+  }
+}
+
+.navigator-actions-order-choices {
+  .navigator-element;
+  top: @navigatorTopOffset + @navigatorHeaderHeight + @navigatorFiltersHeight + @navigatorStatusHeight;
+  left: 0;
+  min-width: @navigatorResultsWidth / 2;
+  background-color: #fff;
+  border-bottom: 1px solid @navigatorBorderLightColor;
+  border-right: 1px solid @navigatorBorderLightColor;
+  overflow: hidden;
+  display: none;
+
+  & > li {
+    height: @navigatorStatusHeight;
+    line-height: @navigatorStatusHeight;
+    padding: 0 10px;
+    cursor: pointer;
+    .trans;
+
+    &:hover {
+      background-color: @navigatorBarBackground;
+    }
+  }
+
+  &.open {
+    display: block;
+  }
+}
+
+.navigator-actions-total {
+  float: right;
+  line-height: @navigatorStatusHeight - 4px;
+}
+
+.navigator-actions-bulk {
+  position: relative;
+  top: -1px;
+  margin-left: 8px;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+
+
+// Footer
+.issues-page #footer {
+  .navigator-element;
+  bottom: 0;
+  left: @navigatorResultsWidth;
+  right: 0;
+  margin: 0;
+  border-top: 1px solid @navigatorBorderLightColor;
+}
+
+.issues-page #ftlinks {
+  margin-top: 0;
+}
